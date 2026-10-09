@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digipedix — Option B · Module showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+
+body{margin:0;background:#161616}
+a{color:#FA4812}a:hover{color:#FF7A4D}
+
+.ob-root{--ground:#161616;--hot:#FA4812;--text:#F4F4F4;--muted:#9FA1A2;--line:rgba(159,161,162,.24);--b:min(50vh,440px)}
+.ob-root button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.ob-root button:focus-visible{outline:2px solid var(--hot);outline-offset:4px}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rise{animation:fadeUp .7s cubic-bezier(.2,.7,.2,1) both}
+.dl1{animation-delay:.08s}.dl2{animation-delay:.16s}.dl3{animation-delay:.24s}
+
+/* backdrop: one tone per module, cross-faded */
+.bg{position:absolute;pointer-events:none}
+.tone{inset:0;opacity:0;transition:opacity 1s ease}
+.tone.on{opacity:1}
+.tone-hip{background:radial-gradient(ellipse 55% 60% at 50% 48%,rgba(159,161,162,.26) 0%,rgba(159,161,162,.07) 48%,transparent 76%)}
+.tone-knee{background:radial-gradient(ellipse 55% 60% at 50% 48%,rgba(250,72,18,.24) 0%,rgba(250,72,18,.06) 48%,transparent 76%)}
+.tone-trauma{background:radial-gradient(ellipse 60% 66% at 50% 48%,rgba(244,244,244,.2) 0%,rgba(159,161,162,.1) 46%,transparent 78%),linear-gradient(#1B1C1E,#1B1C1E)}
+.bg-dots{inset:0;background-image:radial-gradient(circle,rgba(159,161,162,.34) 1px,transparent 1.4px);background-size:28px 28px;background-position:center;-webkit-mask-image:radial-gradient(ellipse 50% 62% at 50% 50%,#000 0%,transparent 100%);mask-image:radial-gradient(ellipse 50% 62% at 50% 50%,#000 0%,transparent 100%)}
+@keyframes spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bg-ring{left:50%;top:50%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%)}
+.bg-ring.r1{width:calc(var(--b) * 1.22);border:1px dashed rgba(159,161,162,.3);animation:spin 120s linear infinite}
+.bg-ring.r2{width:calc(var(--b) * 1.7);border:1px solid rgba(159,161,162,.12)}
+.bg-corner{width:14px;height:14px;border:1px solid rgba(159,161,162,.45)}
+.bg-corner.tl{left:24px;top:24px;border-right:0;border-bottom:0}
+.bg-corner.bl{left:24px;bottom:24px;border-right:0;border-top:0}
+.bg-corner.tr{right:24px;top:24px;border-left:0;border-bottom:0}
+.bg-corner.br{right:24px;bottom:24px;border-left:0;border-top:0}
+
+/* showcase items */
+@keyframes thumbIn{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:blur(0)}}
+@keyframes centerIn{from{opacity:0}to{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.ob-root .item{position:absolute;left:50%;top:50%;width:var(--b);height:var(--b);transform:translate(-50%,-50%) scale(1);transition:left 1s cubic-bezier(.65,0,.2,1),top 1s cubic-bezier(.65,0,.2,1),transform 1s cubic-bezier(.65,0,.2,1),opacity .45s ease,filter .45s ease;border-radius:50%}
+.item img{display:block;width:100%;height:100%;object-fit:contain}
+.ob-root .item.center{z-index:3;opacity:1;cursor:default}
+.item.center img{animation:float 6s ease-in-out 1.2s infinite}
+@keyframes shadowFloat{0%,100%{transform:translateX(-50%) scale(1);opacity:1}50%{transform:translateX(-50%) scale(.82);opacity:.6}}
+.ob-root .item.thumb{z-index:2;left:calc(100% - 96px);top:calc(100% - 104px);transform:translate(-50%,-50%) scale(.26);animation:thumbIn .5s 1s ease-out backwards}
+.ob-root .item.gone{z-index:1;transform:translate(-50%,-50%) scale(.82);opacity:0;filter:blur(10px);pointer-events:none}
+.shadow{position:absolute;left:50%;top:calc(50% + var(--b) * .58);width:calc(var(--b) * .7);height:26px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse closest-side,rgba(0,0,0,.75),rgba(0,0,0,.35) 55%,transparent 100%);pointer-events:none;animation:shadowFloat 6s ease-in-out 1.2s infinite}
+
+/* copy blocks, one per module, stacked */
+.copy{position:absolute;left:0;top:0;right:0;opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .6s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.copy.on{opacity:1;transform:none;transition-delay:.25s}
+
+/* controls */
+.ico{fill:none;stroke:currentColor;stroke-width:1.5px;stroke-linecap:square;stroke-linejoin:miter}
+.ob-root .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:180px;min-height:48px;box-sizing:border-box;padding:0 22px;border-radius:6px;background:var(--hot);color:#FFFFFF;transition:background .25s}
+.ob-root .cta:hover{background:#FF5F2E}
+.ob-root .row{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:4px 0;color:#F4F4F4;transition:color .25s}
+.ob-root .row:hover{color:#FFFFFF}
+.ob-root .row.on{color:var(--hot)}
+.row .num{font-size:12px;color:var(--muted);transition:color .25s}
+.row.on .num{color:var(--hot)}
+.row .nm{font-weight:600;font-size:17px}
+.bar{display:block;flex:1;height:2px;margin-left:6px;background:rgba(159,161,162,.35);position:relative;overflow:hidden;border-radius:1px}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fill{position:absolute;inset:0;background:var(--hot);transform:scaleX(0);transform-origin:left}
+.row.on .fill{transform:scaleX(1)}
+.auto .row.on .fill{animation:grow linear both}
+.paused .row.on .fill{animation-play-state:paused}
+.ob-root .lang{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 8px;border:1px solid rgba(159,161,162,.55);border-radius:4px;color:#C9CBCC;font-size:11px;letter-spacing:.04em}
+.ob-root .lang:hover{border-color:#F4F4F4;color:#F4F4F4}
+.ob-root .signin{font-size:13px;color:#E6E7E8;text-decoration:none}
+.ob-root .signin:hover{color:#FFFFFF}
+
+@keyframes panelIn{from{opacity:0}to{opacity:1}}
+.ob-root .launch{position:absolute;inset:0;z-index:20;background:#161616;display:flex;animation:panelIn .4s ease-out both}
+
+@media (max-width:860px){.ob-root{--b:min(38vh,300px)}}
+@media (prefers-reduced-motion:reduce){.ob-root *,.ob-root *::before,.ob-root *::after{animation-duration:.01s !important;transition:none !important}}
+
+[hidden]{display:none !important}
+</style>
+</head>
+<body>
+<div class="ob-root auto" id="root" style="position: relative; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: #161616; color: #F4F4F4; font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif">
+<header class="rise" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px clamp(20px, 3vw, 40px); border-bottom: 1px solid rgba(159,161,162,.24); position: relative; z-index: 5">
+<a href="index.html" aria-label="All concepts" style="display: flex; text-decoration: none">
+<img src="assets/logo.png" alt="Digipedix" style="display: block; width: 30px; height: 42px; object-fit: contain">
+</a>
+<nav aria-label="Account" style="display: flex; align-items: center; gap: 28px">
+<button type="button" class="lang" aria-label="Language: English">
+<svg class="ico" width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"></path></svg>
+<span>EN</span>
+<svg class="ico" width="10" height="10" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<a class="signin" href="#">Sign in</a>
+</nav>
+</header>
+<main style="flex: 1; position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; min-height: 640px; padding: clamp(24px, 4vw, 56px); box-sizing: border-box">
+<div class="bg tone tone-hip" data-i="0"></div>
+<div class="bg tone tone-knee" data-i="1"></div>
+<div class="bg tone tone-trauma" data-i="2"></div>
+<div class="bg bg-dots"></div>
+<div class="bg bg-ring r2"></div>
+<div class="bg bg-ring r1"></div>
+<div class="bg bg-corner tl"></div>
+<div class="bg bg-corner tr"></div>
+<div class="bg bg-corner bl"></div>
+<div class="bg bg-corner br"></div>
+<div class="shadow"></div>
+<button type="button" class="item" data-i="0"><img src="assets/module-hip.png" alt=""></button>
+<button type="button" class="item" data-i="1"><img src="assets/module-knee.png" alt=""></button>
+<button type="button" class="item" data-i="2"><img src="assets/module-trauma.png" alt=""></button>
+<section class="rise dl1" style="position: relative; z-index: 4; flex: 0 1 340px; min-width: 260px; display: flex; flex-direction: column; gap: 28px">
+<div style="position: relative; height: 130px">
+<div class="copy" data-i="0">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="mono" style="font-size: 12px; letter-spacing: .08em; color: #FA4812">MODULE 01 / 03</span>
+<span style="font-weight: 600; font-size: clamp(56px, 6vw, 88px); line-height: .95; letter-spacing: -.02em">Hip</span>
+</div>
+</div>
+<div class="copy" data-i="1">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="mono" style="font-size: 12px; letter-spacing: .08em; color: #FA4812">MODULE 02 / 03</span>
+<span style="font-weight: 600; font-size: clamp(56px, 6vw, 88px); line-height: .95; letter-spacing: -.02em">Knee</span>
+</div>
+</div>
+<div class="copy" data-i="2">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="mono" style="font-size: 12px; letter-spacing: .08em; color: #FA4812">MODULE 03 / 03</span>
+<span style="font-weight: 600; font-size: clamp(56px, 6vw, 88px); line-height: .95; letter-spacing: -.02em">Trauma</span>
+</div>
+</div>
+</div>
+<div style="display: flex">
+<button type="button" class="cta" id="cta">
+<span id="ctaLabel" style="font-weight: 500; font-size: 15px">Open Hip</span>
+<svg class="ico" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"></path></svg>
+</button>
+</div>
+</section>
+<section class="rise dl2" style="position: relative; z-index: 4; flex: 0 1 260px; min-width: 200px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 13px; letter-spacing: .04em; color: #E6E7E8; padding-bottom: 12px">SELECT MODULE</span>
+<button type="button" class="row" data-i="0" aria-pressed="false">
+<span class="num">01</span>
+<span class="nm">Hip</span>
+<span class="bar"><span class="fill" style="animation-duration: 6s"></span></span>
+</button>
+<button type="button" class="row" data-i="1" aria-pressed="false">
+<span class="num">02</span>
+<span class="nm">Knee</span>
+<span class="bar"><span class="fill" style="animation-duration: 6s"></span></span>
+</button>
+<button type="button" class="row" data-i="2" aria-pressed="false">
+<span class="num">03</span>
+<span class="nm">Trauma</span>
+<span class="bar"><span class="fill" style="animation-duration: 6s"></span></span>
+</button>
+</section>
+</main>
+<footer class="rise dl5" style="padding: 16px clamp(20px, 3vw, 40px); border-top: 1px solid rgba(159,161,162,.24); font-size: 13px; color: #9FA1A2">Non-medical device. Not intended for diagnosis or treatment.</footer>
+<button type="button" class="launch" id="launch" hidden aria-label="Back to module selection">
+<span style="margin: auto; display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; padding: 24px">
+<span class="mono" style="font-size: 12px; letter-spacing: .08em; color: #FA4812">OPENING MODULE</span>
+<span id="selName" style="font-weight: 600; font-size: clamp(48px, 7vw, 96px); line-height: 1; letter-spacing: -.02em; color: #F4F4F4"></span>
+<span style="font-size: 15px; color: #9FA1A2">[Module screen goes here] · click to go back</span>
+</span>
+</button>
+</div>
+<script>
+(function () {
+  var NAMES = ['Hip', 'Knee', 'Trauma'], N = 3;
+  var state = { cur: 0, manual: false, go: false };
+  var root = document.getElementById('root');
+  var q = function (s) { return [].slice.call(document.querySelectorAll(s)); };
+  var items = q('.item'), copies = q('.copy'), rows = q('.row'), tones = q('.tone');
+  var launch = document.getElementById('launch');
+  function go(i, manual) {
+    if (manual) state.manual = true;
+    if (i !== state.cur) state.cur = i;
+    render();
+  }
+  function render() {
+    var cur = state.cur, next = (cur + 1) % N;
+    root.className = 'ob-root' + (!state.manual ? ' auto' : '') + (state.go ? ' paused' : '');
+    items.forEach(function (b) {
+      var i = +b.dataset.i;
+      b.className = 'item ' + (i === cur ? 'center' : i === next ? 'thumb' : 'gone');
+      b.tabIndex = (i === cur || i === next) ? 0 : -1;
+      b.setAttribute('aria-label', i === cur ? NAMES[i] + ' module, current' : 'Next: show ' + NAMES[i] + ' module');
+    });
+    copies.forEach(function (c) { var on = +c.dataset.i === cur; c.className = 'copy' + (on ? ' on' : ''); c.setAttribute('aria-hidden', String(!on)); });
+    rows.forEach(function (r) { var on = +r.dataset.i === cur; r.className = 'row' + (on ? ' on' : ''); r.setAttribute('aria-pressed', String(on)); });
+    tones.forEach(function (t) { t.className = t.className.replace(/ on$/, '') + (+t.dataset.i === cur ? ' on' : ''); });
+    document.getElementById('ctaLabel').textContent = 'Open ' + NAMES[cur];
+    document.getElementById('selName').textContent = NAMES[cur];
+    launch.hidden = !state.go;
+  }
+  items.forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.i, true); }); });
+  rows.forEach(function (r) {
+    r.addEventListener('click', function () { go(+r.dataset.i, true); });
+    r.querySelector('.fill').addEventListener('animationend', function (e) {
+      if (e.animationName === 'grow' && +r.dataset.i === state.cur && !state.manual) go((state.cur + 1) % N);
+    });
+  });
+  document.getElementById('cta').addEventListener('click', function () { state.go = true; render(); });
+  launch.addEventListener('click', function () { state.go = false; render(); });
+  render();
+})();
+</script>
+</body>
+</html>

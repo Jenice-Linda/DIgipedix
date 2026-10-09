@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digipedix — Option A · Skeleton selector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+
+body{margin:0;background:#161616}
+a{color:#FA4812}a:hover{color:#FF7A4D}
+
+.sp-root{--ground:#161616;--hot:#FA4812;--text:#F4F4F4;--muted:#9FA1A2;--line:rgba(159,161,162,.24);--walk:1.6s}
+.sp-root button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.sp-root button:focus-visible{outline:2px solid var(--hot);outline-offset:4px}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+
+/* entrance */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rise{animation:fadeUp .7s cubic-bezier(.2,.7,.2,1) both}
+.dl1{animation-delay:.08s}.dl2{animation-delay:.16s}.dl3{animation-delay:.24s}.dl4{animation-delay:.32s}.dl5{animation-delay:.4s}
+@keyframes figIn{from{opacity:0}to{opacity:1}}
+.fig-in{animation:figIn 1.2s .2s ease-out both}
+
+/* stage backdrop */
+.bg{position:absolute;pointer-events:none}
+.bg-dots{inset:0;background-image:radial-gradient(circle,rgba(159,161,162,.34) 1px,transparent 1.4px);background-size:28px 28px;background-position:center;-webkit-mask-image:radial-gradient(ellipse 62% 70% at 50% 50%,#000 0%,transparent 100%);mask-image:radial-gradient(ellipse 62% 70% at 50% 50%,#000 0%,transparent 100%)}
+.bg-light{left:50%;top:50%;width:min(760px,96%);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(159,161,162,.16) 0%,rgba(159,161,162,.05) 42%,transparent 68%)}
+@keyframes spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bg-ring{left:50%;top:50%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%)}
+.bg-ring.r1{width:min(520px,78%);border:1px solid rgba(159,161,162,.2)}
+.bg-ring.r2{width:min(700px,104%);border:1px dashed rgba(159,161,162,.22);animation:spin 120s linear infinite}
+.bg-ring.r3{width:min(900px,134%);border:1px solid rgba(159,161,162,.1)}
+.bg-axis-v{left:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(159,161,162,.2) 18%,rgba(159,161,162,.2) 82%,transparent)}
+.bg-axis-h{top:50%;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(159,161,162,.16) 18%,rgba(159,161,162,.16) 82%,transparent)}
+.bg-ruler{right:24px;top:9%;bottom:9%;width:10px;border-right:1px solid rgba(159,161,162,.3);background-image:repeating-linear-gradient(to bottom,rgba(159,161,162,.5) 0 1px,transparent 1px 12px);-webkit-mask-image:linear-gradient(to right,transparent 0,transparent 40%,#000 40%);mask-image:linear-gradient(to right,transparent 0,transparent 40%,#000 40%)}
+.bg-ruler2{right:24px;top:9%;bottom:9%;width:16px;background-image:repeating-linear-gradient(to bottom,rgba(159,161,162,.6) 0 1px,transparent 1px 60px)}
+.bg-corner{width:14px;height:14px;border:1px solid rgba(159,161,162,.45)}
+.bg-corner.tl{left:24px;top:24px;border-right:0;border-bottom:0}
+.bg-corner.bl{left:24px;bottom:24px;border-right:0;border-top:0}
+.bg-corner.tr{right:60px;top:24px;border-left:0;border-bottom:0}
+.bg-corner.br{right:60px;bottom:24px;border-left:0;border-top:0}
+@keyframes sweep{0%{top:8%;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:92%;opacity:0}}
+.bg-sweep{left:12%;right:12%;height:1px;background:linear-gradient(to right,transparent,rgba(250,72,18,.55),transparent);animation:sweep 9s cubic-bezier(.45,0,.55,1) infinite}
+.still .bg-ring.r2,.still .bg-sweep{animation:none}
+.still .bg-sweep{display:none}
+.bg-meta{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;color:#9FA1A2}
+
+/* figure */
+.fig{height:min(72vh,660px)}
+.baseline{position:absolute;left:-70%;right:-70%;top:99.4%;height:1px;background:var(--line);pointer-events:none}
+.rig{position:absolute;inset:0;pointer-events:none;transform-origin:50% 100%;animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.008)}}
+.still .rig{animation:none}
+.sk{position:absolute;inset:0;background-position:0 0;background-size:100% 100%;background-repeat:no-repeat}
+.sk-base{background-image:url(assets/skeleton-neutral.png);filter:brightness(.78);opacity:.9;transition:opacity .35s}
+.sk-ov{background-image:url(assets/skeleton-accent.png);opacity:0;transition:opacity .35s}
+.ov-hip{-webkit-mask-image:radial-gradient(ellipse 30% 8.5% at 50% 45%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 30% 8.5% at 50% 45%,#000 62%,transparent 100%)}
+.ov-knee{-webkit-mask-image:radial-gradient(ellipse 27% 8.5% at 50% 66%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 27% 8.5% at 50% 66%,#000 62%,transparent 100%)}
+.ov-fx{-webkit-mask-image:radial-gradient(ellipse 14% 7.5% at 63% 79.5%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 14% 7.5% at 63% 79.5%,#000 62%,transparent 100%)}
+.h-hip .ov-hip,.h-knee .ov-knee,.h-trauma .ov-fx{opacity:1}
+.gl{position:absolute;border-radius:50%;opacity:0;transition:opacity .35s;mix-blend-mode:screen;background:radial-gradient(ellipse closest-side,rgba(250,72,18,.6) 0%,rgba(250,72,18,.26) 45%,transparent 100%)}
+.gl-hip{left:8%;right:8%;top:35%;height:20%}
+.gl-knee{left:12%;right:12%;top:56%;height:20%}
+.gl-fx{left:42%;right:16%;top:70%;height:19%}
+.h-hip .gl-hip,.h-knee .gl-knee{opacity:1}
+.h-trauma .gl-fx{opacity:.4}
+.sp-root.s-hip .gl-hip,.sp-root.s-knee .gl-knee{opacity:.7}
+.sp-root.s-trauma .gl-fx{opacity:.4}
+.s-hip .sk-base,.s-knee .sk-base{opacity:.42}
+.sp-root.s-hip .ov-hip,.sp-root.s-knee .ov-knee,.sp-root.s-trauma .ov-fx{opacity:1}
+.sk-tint{background-image:url(assets/skeleton-tint.png);opacity:0;transition:opacity .45s}
+.h-trauma .sk-tint{opacity:.5}
+.sp-root.s-trauma .sk-tint{opacity:.62}
+@keyframes ptPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.pt{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;opacity:0;transition:opacity .4s;mix-blend-mode:screen;background:radial-gradient(circle closest-side,rgba(255,226,206,.95) 0%,rgba(250,72,18,.85) 22%,rgba(250,72,18,.3) 55%,transparent 100%)}
+.h-trauma .pt,.s-trauma .pt{opacity:1}
+.s-trauma .pt{animation:ptPulse 2.6s ease-in-out infinite}
+.pt.p2{animation-delay:-.5s}.pt.p3{animation-delay:-1s}.pt.p4{animation-delay:-1.5s}.pt.p5{animation-delay:-2s}
+.still .pt{animation:none}
+
+/* hit areas + callouts */
+.hit{position:absolute;display:flex;align-items:center;gap:10px}
+.hit-trauma{inset:0;z-index:1}
+.hit-hip{left:24%;right:-62%;top:38%;height:14%;z-index:2}
+.hit-knee{left:-62%;right:26%;top:59%;height:14%;z-index:2}
+.tx{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.08em;color:var(--muted);white-space:nowrap;transition:color .25s}
+.ln{flex:1;height:1px;background:var(--line);transition:background .25s}
+.hit-hip .ln{margin-left:39%}
+.hit-knee .ln{margin-right:37%}
+.brk{position:absolute;left:-22%;top:1%;bottom:1%;width:10px;border:1px solid var(--line);border-right:0;transition:border-color .25s}
+.tag-t{position:absolute;right:112%;top:8%}
+.h-hip .hit-hip .tx,.h-knee .hit-knee .tx,.h-trauma .hit-trauma .tx{color:var(--text)}
+.h-hip .hit-hip .ln,.h-knee .hit-knee .ln{background:var(--muted)}
+.s-hip .hit-hip .tx,.s-knee .hit-knee .tx,.s-trauma .hit-trauma .tx{color:var(--hot)}
+.s-hip .hit-hip .ln,.s-knee .hit-knee .ln{background:var(--hot)}
+
+/* module list */
+.sp-root .mod{display:flex;align-items:center;gap:16px;width:100%;min-height:56px;padding:0 14px;box-sizing:border-box;border-radius:6px;color:var(--text);background:transparent;transition:background .25s,color .25s}
+.mod .num{font-size:13px;color:var(--muted);width:22px;transition:color .25s}
+.mod .name{font-weight:600;font-size:20px;letter-spacing:-.01em;transition:font-size .25s}
+.mod .arr{margin-left:auto;font-size:22px;line-height:1;opacity:0;transform:translateX(-6px);transition:opacity .25s,transform .25s}
+.sp-root .mod.hot,.sp-root .mod.on{background:var(--hot);color:#FFFFFF}
+.mod.hot .num,.mod.on .num{color:rgba(255,255,255,.72)}
+.mod.hot .name,.mod.on .name{font-size:24px}
+.mod.hot .arr,.mod.on .arr{opacity:1;transform:none}
+.rule{height:1px;background:var(--line);margin:0 0}
+.ico{fill:none;stroke:currentColor;stroke-width:1.5px;stroke-linecap:square;stroke-linejoin:miter}
+.sp-root .lang{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 8px;border:1px solid rgba(159,161,162,.55);border-radius:4px;color:#C9CBCC;font-size:11px;letter-spacing:.04em}
+.sp-root .lang:hover{border-color:#F4F4F4;color:#F4F4F4}
+.sp-root .signin{font-size:13px;color:#E6E7E8;text-decoration:none}
+.sp-root .signin:hover{color:#FFFFFF}
+
+/* launch */
+@keyframes panelIn{from{opacity:0}to{opacity:1}}
+.sp-root .launch{position:absolute;inset:0;z-index:20;background:#161616;display:flex;animation:panelIn .4s ease-out both}
+
+@media (max-width:760px){.tx,.ln,.brk{display:none}.sp-root .fig{height:min(60vh,480px)}}
+@media (prefers-reduced-motion:reduce){.sp-root *,.sp-root *::before,.sp-root *::after{animation:none !important;transition:none !important}}
+
+[hidden]{display:none !important}
+</style>
+</head>
+<body>
+<div class="sp-root h-none" id="root" style="position: relative; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: #161616; color: #F4F4F4; font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif">
+<header class="rise" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px clamp(20px, 3vw, 40px); border-bottom: 1px solid rgba(159,161,162,.24); position: relative; z-index: 5">
+<a href="index.html" aria-label="All concepts" style="display: flex; text-decoration: none">
+<img src="assets/logo.png" alt="Digipedix" style="display: block; width: 30px; height: 42px; object-fit: contain">
+</a>
+<nav aria-label="Account" style="display: flex; align-items: center; gap: 28px">
+<button type="button" class="lang" aria-label="Language: English">
+<svg class="ico" width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"></path></svg>
+<span>EN</span>
+<svg class="ico" width="10" height="10" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<a class="signin" href="#">Sign in</a>
+</nav>
+</header>
+<main style="flex: 1; display: flex; flex-wrap: wrap; align-items: stretch">
+<section style="flex: 0 1 340px; min-width: 260px; box-sizing: border-box; padding: clamp(28px, 5vw, 64px) clamp(20px, 3vw, 40px); display: flex; flex-direction: column; justify-content: center; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="rise dl1" style="font-size: 13px; letter-spacing: .04em; color: #E6E7E8">START</span>
+<h1 class="rise dl2" style="margin: 0; font-weight: 600; font-size: clamp(26px, 2.2vw, 32px); line-height: 1.15; letter-spacing: -.01em">Select a module</h1>
+<p class="rise dl3" style="margin: 0; max-width: 30ch; font-size: 15px; line-height: 1.5; color: #C9CBCC">Choose a region on the skeleton, or pick from the list.</p>
+</div>
+<div class="rise dl4" style="display: flex; flex-direction: column; gap: 4px">
+<div class="rule"></div>
+<button type="button" class="mod" data-id="hip" aria-pressed="false">
+<span class="num">01</span>
+<span class="name">Hip</span>
+<span class="arr" aria-hidden="true">→</span>
+</button>
+<div class="rule"></div>
+<button type="button" class="mod" data-id="knee" aria-pressed="false">
+<span class="num">02</span>
+<span class="name">Knee</span>
+<span class="arr" aria-hidden="true">→</span>
+</button>
+<div class="rule"></div>
+<button type="button" class="mod" data-id="trauma" aria-pressed="false">
+<span class="num">03</span>
+<span class="name">Trauma</span>
+<span class="arr" aria-hidden="true">→</span>
+</button>
+<div class="rule"></div>
+</div>
+</section>
+<section style="flex: 999 1 520px; min-width: 0; min-height: 640px; position: relative; overflow: hidden; display: grid; place-items: center; border-left: 1px solid rgba(159,161,162,.24)">
+<div class="bg bg-dots"></div>
+<div class="bg bg-light"></div>
+<div class="bg bg-ring r3"></div>
+<div class="bg bg-ring r2"></div>
+<div class="bg bg-ring r1"></div>
+<div class="bg bg-axis-v"></div>
+<div class="bg bg-axis-h"></div>
+<div class="bg bg-ruler"></div>
+<div class="bg bg-ruler2"></div>
+<div class="bg bg-corner tl"></div>
+<div class="bg bg-corner tr"></div>
+<div class="bg bg-corner bl"></div>
+<div class="bg bg-corner br"></div>
+<div class="bg bg-sweep"></div>
+<span class="bg bg-meta" style="left: 48px; top: 22px">Anterior View</span>
+<span class="bg bg-meta" style="left: 48px; bottom: 22px">Full Skeleton . 3 Modules</span>
+<div class="fig fig-in" style="position: relative; aspect-ratio: 550 / 995">
+<div class="baseline"></div>
+<div class="rig" aria-hidden="true">
+<div class="sk sk-base"></div>
+<div class="sk sk-tint"></div>
+<div class="sk sk-ov ov-hip"></div>
+<div class="sk sk-ov ov-knee"></div>
+<div class="sk sk-ov ov-fx"></div>
+<div class="gl gl-hip"></div>
+<div class="gl gl-knee"></div>
+<div class="gl gl-fx"></div>
+<i class="pt p1" style="left: 38%; top: 18%"></i>
+<i class="pt p2" style="left: 62%; top: 28%"></i>
+<i class="pt p3" style="left: 13.5%; top: 48%"></i>
+<i class="pt p4" style="left: 37%; top: 56%"></i>
+<i class="pt p5" style="left: 77%; top: 30%"></i>
+</div>
+<button type="button" class="hit hit-trauma" data-id="trauma" aria-pressed="false" aria-label="Select Trauma module — whole skeleton">
+<span class="tx tag-t">03 Trauma . Any Bone</span>
+</button>
+<button type="button" class="hit hit-hip" data-id="hip" aria-pressed="false" aria-label="Select Hip module">
+<span class="ln"></span>
+<span class="tx">01 Hip</span>
+</button>
+<button type="button" class="hit hit-knee" data-id="knee" aria-pressed="false" aria-label="Select Knee module">
+<span class="tx">02 Knee</span>
+<span class="ln"></span>
+</button>
+</div>
+</section>
+</main>
+<footer class="rise dl5" style="padding: 16px clamp(20px, 3vw, 40px); border-top: 1px solid rgba(159,161,162,.24); font-size: 13px; color: #9FA1A2">Non-medical device. Not intended for diagnosis or treatment.</footer>
+<button type="button" class="launch" id="launch" hidden aria-label="Back to module selection">
+<span style="margin: auto; display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; padding: 24px">
+<span class="mono" style="font-size: 12px; letter-spacing: .08em; color: #FA4812">OPENING MODULE</span>
+<span id="selName" style="font-weight: 600; font-size: clamp(48px, 7vw, 96px); line-height: 1; letter-spacing: -.02em; color: #F4F4F4"></span>
+<span style="font-size: 15px; color: #9FA1A2">[Module screen goes here] · click to go back</span>
+</span>
+</button>
+</div>
+<script>
+(function () {
+  var NAMES = { hip: 'Hip', knee: 'Knee', trauma: 'Trauma' };
+  var state = { sel: null, hov: null, go: false };
+  var root = document.getElementById('root');
+  var rows = [].slice.call(document.querySelectorAll('.mod'));
+  var hits = [].slice.call(document.querySelectorAll('.hit'));
+  var launch = document.getElementById('launch');
+  function render() {
+    root.className = 'sp-root ' + (state.hov ? 'h-' + state.hov : 'h-none') + (state.sel ? ' picked s-' + state.sel : '');
+    rows.forEach(function (b) {
+      var id = b.dataset.id;
+      b.className = 'mod' + (state.sel === id ? ' on' : '') + (state.hov === id && state.sel !== id ? ' hot' : '');
+      b.setAttribute('aria-pressed', String(state.sel === id));
+    });
+    hits.forEach(function (b) { b.setAttribute('aria-pressed', String(state.sel === b.dataset.id)); });
+    launch.hidden = !(state.go && state.sel);
+    document.getElementById('selName').textContent = state.sel ? NAMES[state.sel] : '';
+  }
+  function hover(el) {
+    var on = function () { state.hov = el.dataset.id; render(); };
+    var off = function () { state.hov = null; render(); };
+    el.addEventListener('mouseenter', on); el.addEventListener('focus', on);
+    el.addEventListener('mouseleave', off); el.addEventListener('blur', off);
+  }
+  rows.forEach(function (b) {
+    hover(b);
+    b.addEventListener('click', function () {
+      if (state.sel === b.dataset.id) state.go = true; else state.sel = b.dataset.id;
+      render();
+    });
+  });
+  hits.forEach(function (b) {
+    hover(b);
+    b.addEventListener('click', function () { state.sel = b.dataset.id; render(); });
+  });
+  launch.addEventListener('click', function () { state.go = false; render(); });
+  render();
+})();
+</script>
+</body>
+</html>
